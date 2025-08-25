@@ -1,0 +1,32 @@
+# logger settings block
+logger:
+  # log level
+  level: -4
+
+# screenshotter settings block
+screenshotter:
+  # default screenshotter options
+  # default:
+  #   user_agent: "shot/1.0"
+
+  # advances options for specific sites
+  sites:
+    # hostname
+    webhook.site:
+      # enabled flag
+      enabled: true
+      # host of the site
+      #   if empty - set hostname
+      # host: webhook.site
+      #  http user agent
+      user_agent: example user agent
+      # resolution (default - 1920x1080)
+      resolution:
+        # width
+        width: 1920
+        # height
+        height: 1080
+      cookies:
+        - "key=value"
+      headers:
+        foo: bar

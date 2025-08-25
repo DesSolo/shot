@@ -1,0 +1,52 @@
+lint:
+    use:
+        - DEFAULT
+deps:
+    - github.com/googleapis/googleapis
+    - github.com/grpc-ecosystem/grpc-gateway
+    - github.com/bufbuild/protoc-gen-validate
+generate:
+    inputs:
+      - directory: api
+    plugins:
+        # Генерирует файлы .pb.go
+        - name: go
+          out: ./pkg
+          opts:
+            paths: source_relative
+
+        # Генерирует файлы _grpc.pb.go
+        - name: go-grpc
+          out: ./pkg
+          opts:
+            paths: source_relative
+
+        # Генерирует файлы .pb.gw.go
+        - name: grpc-gateway
+          out: ./pkg
+          opts:
+            paths: source_relative
+            generate_unbound_methods: true
+
+        # Генерирует файлы .swagger.json
+        - name: openapiv2
+          out: ./pkg
+
+        # Генерирует один общий файл .swagger.json
+        - name: openapiv2
+          out: ./docs
+          opts:
+            allow_merge: true
+            generate_unbound_methods: true
+
+        # Генерирует валидаторы
+        - name: validate
+          out: ./pkg
+          opts:
+            lang: go
+            paths: source_relative
+
+        # Генерирует заглушки
+        - name: stub
+          out: .
+

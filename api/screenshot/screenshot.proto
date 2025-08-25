@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package screenshot;
+
+option go_package = "shot/pkg/api/screenshot";
+
+import "google/api/annotations.proto";
+import "validate/validate.proto";
+
+service Screenshot {
+
+  // Get site image
+  rpc Image (ImageRequest) returns (ImageResponse) {
+    option (google.api.http) = {
+      get: "/v1/image"
+    };
+  }
+}
+
+// Request for image
+message ImageRequest {
+  // Site url
+  string url = 1 [(validate.rules).string = {min_len: 10}];
+}
+
+// Response for image
+message ImageResponse {
+  // Image bytes
+  bytes image = 1 [json_name = "image"];
+}
