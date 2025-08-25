@@ -30,7 +30,7 @@ func (c *container) Config() *config.Config {
 	if c.config == nil {
 		configFilePath := os.Getenv("CONFIG_FILE_PATH")
 		if configFilePath == "" {
-			configFilePath = "config.yaml"
+			configFilePath = "config.yml"
 		}
 
 		cfg, err := config.NewConfigFromFile(configFilePath)

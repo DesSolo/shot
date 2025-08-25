@@ -57,10 +57,31 @@ func (m *ImageRequest) validate(all bool) error {
 
 	var errors []error
 
-	if utf8.RuneCountInString(m.GetUrl()) < 10 {
+	if uri, err := url.Parse(m.GetUrl()); err != nil {
+		err = ImageRequestValidationError{
+			field:  "Url",
+			reason: "value must be a valid URI",
+			cause:  err,
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	} else if !uri.IsAbs() {
 		err := ImageRequestValidationError{
 			field:  "Url",
-			reason: "value length must be at least 10 runes",
+			reason: "value must be absolute",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if !_ImageRequest_Url_Pattern.MatchString(m.GetUrl()) {
+		err := ImageRequestValidationError{
+			field:  "Url",
+			reason: "value does not match regex pattern \"^https?://\"",
 		}
 		if !all {
 			return err
@@ -144,6 +165,8 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = ImageRequestValidationError{}
+
+var _ImageRequest_Url_Pattern = regexp.MustCompile("^https?://")
 
 // Validate checks the field values on ImageResponse with the rules defined in
 // the proto definition for this message. If any rules are violated, the first

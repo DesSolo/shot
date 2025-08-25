@@ -39,6 +39,15 @@ clean:
 
 generate:
 	$(LOCAL_BIN)/easyp mod update
+	$(LOCAL_BIN)/easyp mod vendor
 	PATH=$(LOCAL_BIN):$(PATH) $(LOCAL_BIN)/easyp generate
 	rm pkg/*.json
 	./scripts/fix_openapi.sh docs/apidocs.swagger.json "${PROJECT_NAME}" "${VERSION}"
+
+RELEASE_DIRECTORY = bin/release
+
+clear-release:
+	rm -rf ${RELEASE_DIRECTORY}
+
+build-docker: clear-release
+	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -installsuffix cgo -o ${RELEASE_DIRECTORY}/${PROJECT_NAME}_docker ${MAIN_FILE_PATH}

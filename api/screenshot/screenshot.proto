@@ -20,11 +20,16 @@ service Screenshot {
 // Request for image
 message ImageRequest {
   // Site url
-  string url = 1 [(validate.rules).string = {min_len: 10}];
+  string url = 1 [
+    (validate.rules).string = {
+      pattern: '^https?://',
+      uri: true,
+    }
+  ];
 }
 
 // Response for image
 message ImageResponse {
-  // Image bytes
+  // Image bytes in PNG format
   bytes image = 1 [json_name = "image"];
 }

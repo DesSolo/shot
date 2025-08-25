@@ -2,21 +2,23 @@ package screenshot
 
 import (
 	"context"
-	"fmt"
 	"log/slog"
 
-	"shot/pkg/api/screenshot"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
+
+	desc "shot/pkg/api/screenshot"
 )
 
 // Image Get site image
-func (i *Implementation) Image(ctx context.Context, req *screenshot.ImageRequest) (*screenshot.ImageResponse, error) {
+func (i *Implementation) Image(ctx context.Context, req *desc.ImageRequest) (*desc.ImageResponse, error) {
 	data, err := i.provider.Image(ctx, req.GetUrl())
 	if err != nil {
 		slog.ErrorContext(ctx, "provider.Image", "err", err)
-		return nil, fmt.Errorf("provider.Image: %w", err)
+		return nil, status.Errorf(codes.Internal, "provider.Image: %s", err.Error())
 	}
 
-	return &screenshot.ImageResponse{
+	return &desc.ImageResponse{
 		Image: data,
 	}, nil
 }

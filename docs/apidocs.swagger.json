@@ -84,7 +84,7 @@
         "image": {
           "type": "string",
           "format": "byte",
-          "title": "Image bytes"
+          "title": "Image bytes in PNG format"
         }
       },
       "title": "Response for image"
